@@ -15,12 +15,27 @@ public class MyLinkedList {
         return size;
     }
 
-    public void add(int value){
+    public void add(Integer value){
         Entry<Integer> newEntry = new Entry<>(value, header, header.previos);
         newEntry.value = value;
         newEntry.previos.next = newEntry;
         newEntry.next.previos = newEntry;
         size++;
+    }
+
+    public Integer remove(Integer value){
+      if (value != null){
+          for(Entry<Integer> e = header.next; e.value != null; e = e.next){
+              if (value.equals(e.value)){
+                  Integer result = e.value;
+                  e.previos.next = e.next;
+                  e.next.previos = e.previos;
+                  size--;
+                  return result;
+              }
+          }
+      }
+        return null;
     }
 
     private static class Entry<T>{
@@ -30,36 +45,11 @@ public class MyLinkedList {
         Entry<T> previos;
 
         Entry(){
-
         }
 
         Entry(T value, Entry<T> next, Entry<T> previos){
             this.value = value;
             this.next = next;
-            this.previos = previos;
-        }
-
-        public T getValue() {
-            return value;
-        }
-
-        public void setValue(T value) {
-            this.value = value;
-        }
-
-        public Entry<T> getNext() {
-            return next;
-        }
-
-        public void setNext(Entry<T> next) {
-            this.next = next;
-        }
-
-        public Entry<T> getPrevios() {
-            return previos;
-        }
-
-        public void setPrevios(Entry<T> previos) {
             this.previos = previos;
         }
     }
