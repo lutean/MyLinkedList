@@ -27,11 +27,10 @@ public class MyLinkedList {
       if (value != null){
           for(Entry<Integer> e = header.next; e.value != null; e = e.next){
               if (value.equals(e.value)){
-                  Integer result = e.value;
                   e.previos.next = e.next;
                   e.next.previos = e.previos;
                   size--;
-                  return result;
+                  return e.value;
               }
           }
       }
