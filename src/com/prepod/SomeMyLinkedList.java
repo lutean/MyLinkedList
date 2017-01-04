@@ -32,6 +32,16 @@ public class SomeMyLinkedList extends MyLinkedList<Object> {
         return false;
     }
 
+    public boolean containsValue(Object value){
+        if ((value instanceof Integer) ||
+                (value instanceof Float) ||
+                (value instanceof String)){
+
+            return super.containsValue(value);
+        }
+        return false;
+    }
+
     public void print(int index){
         System.out.println(get(index));
     }

@@ -74,7 +74,7 @@ public class MyLinkedList<T> {
         return false;
     }
 
-    protected boolean clear(){
+    public boolean clear(){
         if (size == 0) return false;
         for (Entry<T> temp = header; temp != null; ) {
             Entry<T> next = temp.next;
