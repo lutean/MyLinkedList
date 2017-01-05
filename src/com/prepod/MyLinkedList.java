@@ -1,5 +1,7 @@
 package com.prepod;
 
+import com.sun.istack.internal.Nullable;
+
 public class MyLinkedList<T> {
 
     private int size;
@@ -16,37 +18,33 @@ public class MyLinkedList<T> {
     }
 
     protected boolean add(T value){
-        if (value == null) return false;
-            Entry<T> newEntry = new Entry<>(value, header, header.previos);
-            newEntry.value = value;
-            newEntry.previos.next = newEntry;
-            newEntry.next.previos = newEntry;
-            size++;
-            return true;
+        return addEntry(value, header);
     }
 
     protected boolean add(T value, int index){
-        if (value == null) return false;
-        Entry<T> nextEntry = index == size ? header : findEntry(index);
-        Entry<T> newEntry = new Entry<>(value, nextEntry, nextEntry.previos);
-        newEntry.value = value;
-        newEntry.previos.next = newEntry;
-        newEntry.next.previos = newEntry;
-        size++;
-        return true;
+        return addEntry(value, index == size ? header : findEntry(index));
     }
 
     protected boolean remove(T value){
-      if (value == null) return false;
-          for(Entry<T> entry = header.next; entry.value != null; entry = entry.next){
-              if (value.equals(entry.value)){
-                  entry.previos.next = entry.next;
-                  entry.next.previos = entry.previos;
-                  size--;
-                  return true;
-              }
+          Entry<T> entry = findEntry(value);
+          if (entry != null) {
+              entry.previos.next = entry.next;
+              entry.next.previos = entry.previos;
+              size--;
+              return true;
           }
         return false;
+    }
+
+    @Nullable
+    private Entry<T> findEntry(T value){
+        if (value == null) return null;
+        for(Entry<T> entry = header.next; entry.value != null; entry = entry.next) {
+            if (value.equals(entry.value)) {
+                return entry;
+            }
+        }
+            return null;
     }
 
     protected T get(int index){
@@ -65,25 +63,27 @@ public class MyLinkedList<T> {
     }
 
     protected boolean containsValue(T value){
-        if (value == null) return false;
-        for(Entry<T> entry = header.next; entry.value != null; entry = entry.next) {
-            if (value.equals(entry.value)) {
-                return true;
-            }
-        }
-        return false;
+       if (findEntry(value) != null) {
+           return true;
+       }
+       return false;
     }
 
     public boolean clear(){
         if (size == 0) return false;
-        for (Entry<T> temp = header; temp != null; ) {
-            Entry<T> next = temp.next;
-            temp.value = null;
-            temp.next = null;
-            temp.previos = null;
-            temp = next;
-        }
+        header.next = header;
+        header.previos = header;
         size = 0;
+        return true;
+    }
+
+    private boolean addEntry(T value, Entry<T> nextEntry){
+        if (value == null) return false;
+        Entry<T> newEntry = new Entry<>(value, nextEntry, nextEntry.previos);
+        newEntry.value = value;
+        newEntry.previos.next = newEntry;
+        newEntry.next.previos = newEntry;
+        size++;
         return true;
     }
 
